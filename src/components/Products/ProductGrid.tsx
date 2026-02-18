@@ -1,5 +1,6 @@
 import { products } from '../../data/products';
 import ProductCard from './ProductCard';
+import FeaturedBraceletsBlock from './FeaturedBraceletsBlock';
 import DecorativeIcon from '../DecorativeIcons';
 
 interface ProductGridProps {
@@ -13,7 +14,7 @@ export default function ProductGrid({
   onAddToCart,
   onOrderFormOpen,
 }: ProductGridProps) {
-  const availableProducts = products.filter((p) => p.status === 'available');
+  const nonBraceletProducts = products.filter((p) => p.collection !== 'bracelets');
 
   return (
     <section className="py-16 md:py-24 bg-white relative">
@@ -30,16 +31,22 @@ export default function ProductGrid({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onQuickView={onProductSelect}
-              onAddToCart={onAddToCart}
-            />
-          ))}
+        <div className="mb-12">
+          <FeaturedBraceletsBlock />
         </div>
+
+        {nonBraceletProducts.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {nonBraceletProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onQuickView={onProductSelect}
+                onAddToCart={onAddToCart}
+              />
+            ))}
+          </div>
+        )}
 
         <div className="text-center">
           <button
@@ -49,14 +56,6 @@ export default function ProductGrid({
             أُطلب قطعتك
           </button>
         </div>
-
-        {availableProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-xl text-gray-600">
-              لا توجد قطع متاحة حالياً
-            </p>
-          </div>
-        )}
       </div>
     </section>
   );
